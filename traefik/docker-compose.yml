@@ -1,0 +1,34 @@
+version: "3.8"
+
+services:
+  traefik:
+    image: "traefik:latest"
+    container_name: "traefik"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"  # (optional) expose the dashboard !don't use in production! The labels below will route to 8080 (your dashboard)
+    volumes:
+      - "${PWD}/traefik.yml:/etc/traefik/traefik.yml"
+      - "${PWD}/certs:/etc/traefik/certs"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    labels:
+      - "traefik.docker.network=traefik-proxy"
+      - "traefik.enable=true"
+      # Route Dashboard
+      - "traefik.http.routers.traefik.rule=Host(`traefik.atakanonol.dev`)"
+      - "traefik.http.routers.traefik.service=api@internal"
+      - "trafeik.http.routers.whoami.tls=true"
+      - "traefik.http.routers.traefik.tls.certresolver=production"
+      - "traefik.http.routers.traefik.entrypoints=websecure"
+      - "traefik.http.routers.traefik.middlewares=auth"
+      # Use htpasswd to generate Apache specific salted MD5 password
+      # DO NOT FORGET TO ESCAPE '$' with another '$'!!
+      - "traefik.http.middlewares.auth.basicauth.users=admin:$$apr1$$5j0z4q36$$Zw6i9ObMYnHtpgjIdGdqJ1" # username:password = admin:admin 
+    networks:
+      - "traefik-proxy"
+    restart: "unless-stopped"
+
+networks:
+  traefik-proxy:
+    external: true

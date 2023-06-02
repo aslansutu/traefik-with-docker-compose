@@ -1,0 +1,19 @@
+version: "3.8"
+
+services:
+  nginx:
+    image: "nginx"
+    container_name: "nginx"
+    networks:
+      - "traefik-proxy"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik-proxy"
+      - "traefik.http.routers.whoami.rule=Host(`domain.name`)"
+      - "traefik.http.routers.whoami.entrypoints=websecure"
+      - "trafeik.http.routers.whoami.tls=true"
+      - "traefik.http.routers.whoami.tls.certresolver=production" # May want to try staging before production as production has a rate limit
+
+networks:
+  traefik-proxy:
+    external: true
