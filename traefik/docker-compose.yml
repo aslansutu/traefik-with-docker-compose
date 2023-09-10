@@ -16,11 +16,12 @@ services:
       - "traefik.docker.network=traefik-proxy"
       - "traefik.enable=true"
       # Route Dashboard
-      - "traefik.http.routers.traefik.rule=Host(`traefik.atakanonol.dev`)"
+      - "traefik.http.routers.traefik.rule=Host(`traefik.${DOMAIN}`)"
       - "traefik.http.routers.traefik.service=api@internal"
       - "trafeik.http.routers.whoami.tls=true"
       - "traefik.http.routers.traefik.tls.certresolver=production"
       - "traefik.http.routers.traefik.entrypoints=websecure"
+      # Authentication middleware
       - "traefik.http.routers.traefik.middlewares=auth"
       # Use htpasswd to generate Apache specific salted MD5 password
       # DO NOT FORGET TO ESCAPE '$' with another '$'!!

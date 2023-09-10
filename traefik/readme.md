@@ -2,7 +2,7 @@
 
 ### Run
 
-To run, edit the lines inside `traefik.yml` to include your email. Also edit `docker-compose.yml` to add your own domain name that will get routed. Afterwards run `docker compose up -d` and then navigate to said domain name.
+To run, edit the lines inside `traefik.yml` to include your email. Also copy `sample.env` as `.env` and edit the variable to reflect your own domain name that will get routed. Afterwards run `docker compose up -d` and then navigate to said url. When running for the first time, it may take a moment for the certificates to generate.
 
 ### What Will Happen
 
